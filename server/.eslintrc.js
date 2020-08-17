@@ -1,29 +1,16 @@
 module.exports = {
-  'env': {
-    'browser': true,
-    'commonjs': true,
-    'es2020': true
+  env: {
+    browser: false,
+    commonjs: true,
+    es6: true,
   },
-  'extends': 'eslint:recommended',
-  'parserOptions': {
-    'ecmaVersion': 11
+  extends: ['plugin:prettier/recommended'],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
   },
-  'rules': {
-    'indent': [
-      'error',
-      2
-    ],
-    'linebreak-style': [
-      'error',
-      'unix'
-    ],
-    'quotes': [
-      'error',
-      'single'
-    ],
-    'semi': [
-      'error',
-      'always'
-    ]
-  }
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: 'module',
+  },
 };

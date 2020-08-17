@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "npm run test",
+    "test": "ava --watch",
     "dev": "nodemon ./src/index.js"
   },
   "keywords": [
@@ -16,9 +16,12 @@
   "author": "MateoVelilla <teovelilla@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "dotenv": "^8.2.0",
     "koa": "^2.13.0"
   },
   "devDependencies": {
+    "ava": "^3.11.1",
     "eslint": "^7.7.0",
     "nodemon": "^2.0.4"
   }
