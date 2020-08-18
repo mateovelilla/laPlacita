@@ -8,7 +8,7 @@ services:
             - MONGO_INITDB_ROOT_PASSWORD=marketplace123
             - MONGO_INITDB_DATABASE=marketplace
         volumes:
-            - ./initDb.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+            - ./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
             - ./mongo-volume:/data/db
         ports:
             - '27017:27017'
