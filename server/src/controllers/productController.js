@@ -5,8 +5,12 @@ class ProductController {
   }
   async find (param) {
     try {
-    const products = await this._productModel.find(param)
-    return products
+      const schema = Joi.object({
+        categoryId: Joi.string()
+      })
+      const value = await schema.validateAsync(param)
+      const products = await this._productModel.find(value)
+      return products
     } catch (error) {
       throw error
     }
