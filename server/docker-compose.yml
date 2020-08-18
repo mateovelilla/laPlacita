@@ -1,0 +1,14 @@
+version: '3'
+services:
+    database:
+        image: mongo
+        container_name: 'mongodb'
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=marketplaceadmin
+            - MONGO_INITDB_ROOT_PASSWORD=marketplace123
+            - MONGO_INITDB_DATABASE=marketplace
+        volumes:
+            - ./initDb.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+            - ./mongo-volume:/data/db
+        ports:
+            - '27017:27017'
