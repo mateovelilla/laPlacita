@@ -5,7 +5,7 @@ let productController;
 test.before(async t=> {
   class ProductModelMock {
     async find (params) {
-      if (params.id === 'nonEx1st3nt1D')
+      if (params.id && params.id === 'nonEx1st3nt1D')
         throw Error('No such product')
       return [];
     }
