@@ -1,1 +1,3 @@
 mongo-volume
+# Workspace VSCODE
+*.code-workspace
