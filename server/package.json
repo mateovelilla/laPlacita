@@ -20,7 +20,9 @@
     "@koa/cors": "^3.1.0",
     "@koa/router": "^9.4.0",
     "dotenv": "^8.2.0",
-    "koa": "^2.13.0"
+    "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
+    "mongoose": "^5.10.0"
   },
   "devDependencies": {
     "ava": "^3.11.1",
