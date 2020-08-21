@@ -12,7 +12,10 @@
       <p class="text-wrap">{{ product.description }}</p>
     </v-card-text>
     <v-card-actions>
-      <div class="text-subtitle font-weight-black">${{product.price}}</div>
+      <div class="d-block">
+        <v-icon v-for="star in product.rating" :key="star" color="secondary">mdi-star</v-icon>
+      </div>
+      <div class="text-subtitle font-weight-black pl-3">${{product.price}}</div>
     </v-card-actions>
   </v-card>
 </template>

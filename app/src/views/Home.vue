@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app flat color="secondary">
       <v-row class="align-center">
-        <v-col cols="2" class="pa-2">
+        <v-col cols="2" >
           <v-img :src="require('@/assets/logo.png')" aspect-ratio="2" contain/>
         </v-col>
         <v-col cols="8" class="pa-0">
@@ -22,6 +22,7 @@
                 flat
                 color="white"
                 light
+                :items="categories"
               ></v-select>
             </template>
           </v-autocomplete>
@@ -49,6 +50,13 @@ export default {
   data () {
     return {
       products: []
+    }
+  },
+  computed: {
+    // https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
+    categories: function () {
+      const categories = this.products.map(p => p.category)
+      return categories.filter((c, i, array) => array.indexOf(c) === i)
     }
   },
   async mounted () {
