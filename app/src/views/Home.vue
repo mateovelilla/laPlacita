@@ -6,26 +6,33 @@
           <v-img :src="require('@/assets/logo.png')" aspect-ratio="2" contain/>
         </v-col>
         <v-col cols="8" class="pa-0">
-          <v-autocomplete
-            light
-            append-icon="search"
-            hide-details
-            solo
-            flat
-          >
-            <template v-slot:prepend-inner>
-              <v-select
-                solo
-                class="category"
-                label="Category"
-                hide-details
-                flat
-                color="white"
-                light
-                :items="categories"
-              ></v-select>
-            </template>
-          </v-autocomplete>
+          <div class="d-flex">
+            <v-select
+              solo
+              class="rounded-r-0"
+              label="Category"
+              hide-details
+              flat
+              color="white"
+              light
+              :items="categories"
+              style="max-width:40%;"
+            ></v-select>
+            <v-autocomplete
+              class="rounded-l-0"
+              light
+              hide-details
+              solo
+              flat
+            >
+              <template v-slot:append>
+                <v-icon>search</v-icon>
+              </template>
+            </v-autocomplete>
+          </div>
+            <!-- <template v-slot:prepend-inner>
+
+            </template> -->
         </v-col>
       </v-row>
     </v-app-bar>
@@ -40,6 +47,7 @@
 </template>
 
 <script>
+// TODO: https://github.com/Intera/vue-zoom-on-hover
 import API from '../services/api'
 import Product from '../components/Product'
 export default {
@@ -62,8 +70,6 @@ export default {
   async mounted () {
     const { data: { products } } = await API.getProducts()
     this.products = products
-    console.log('Hooola')
-    console.log(products)
   }
 }
 </script>
