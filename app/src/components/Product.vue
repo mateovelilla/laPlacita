@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" height="100%" >
+  <v-card class="pa-2"  @click="openDetail">
     <v-img
       class="align-end image-product"
       :src="product.image"
@@ -26,6 +26,11 @@ export default {
     product: {
       type: Object,
       default: null
+    }
+  },
+  methods: {
+    openDetail () {
+      this.$emit('openDetail', this.product)
     }
   }
 }
