@@ -11,7 +11,12 @@ test.before(async t=> {
 		}
 		async deleteProduct(params) {
 			return true
-		}
+    }
+    async find ({userId}) {
+      if (userId === 'nonEx1st3nt1D')
+        throw Error('No such cart')
+      return []
+    }
 	}
 	const cartModelMock = new CartModelMock()
 	cartController = new CartController(cartModelMock)
@@ -56,10 +61,76 @@ test('Get cart by userId Ok', async t => {
 test('Delete product fails - productId field', async t => {
 	await t.throwsAsync(
 		async () => {
-			await cartController.deleteProduct({})
+			await cartController.deleteProduct({userId:'F4k3User'})
     }, {
 			instanceOf: Error,
-			message: '"id" is required'
+			message: '"productId" is required'
+    }
+  )
+});
+
+test('Delete product fails - userId field', async t => {
+	await t.throwsAsync(
+		async () => {
+			await cartController.deleteProduct({productId:'F4k3Product'})
+    }, {
+			instanceOf: Error,
+			message: '"userId" is required'
+    }
+  )
+});
+
+test('Delete product Ok', async t => {
+  const response = await cartController.deleteProduct({productId:'F4k3Product', userId:'F4k3User'})
+  t.true(response)
+});
+
+// ADD PRODUCT TO CART
+test('Add product to cart fails - productId field', async t => {
+	await t.throwsAsync(
+		async () => {
+			await cartController.create({userId:'F4k3User'})
+    }, {
+			instanceOf: Error,
+			message: '"productId" is required'
+    }
+  )
+});
+
+test('Add product to cart fails - userId field', async t => {
+	await t.throwsAsync(
+		async () => {
+			await cartController.create({productId:'F4k3Product'})
+    }, {
+			instanceOf: Error,
+			message: '"userId" is required'
+    }
+  )
+});
+
+test('Add product to cart fails - qty field', async t => {
+	await t.throwsAsync(
+		async () => {
+			await cartController.create({productId:'F4k3Product', userId:'F4k3User'})
+    }, {
+			instanceOf: Error,
+			message: '"qty" is required'
+    }
+  )
+  await t.throwsAsync(
+		async () => {
+			await cartController.create({productId:'F4k3Product', userId:'F4k3User', qty: ''})
+    }, {
+			instanceOf: Error,
+			message: '"qty" must be a number'
+    }
+  )
+  await t.throwsAsync(
+		async () => {
+			await cartController.create({productId:'F4k3Product', userId:'F4k3User', qty: undefined})
+    }, {
+			instanceOf: Error,
+			message: '"qty" is required'
     }
   )
 });

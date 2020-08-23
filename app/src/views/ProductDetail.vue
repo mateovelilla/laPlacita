@@ -37,25 +37,55 @@
           <v-card-text>
             <span>{{product.description}}</span>
           </v-card-text>
-          <v-card-actions>
-            <v-btn  large color="secondary">
-              <v-icon>shopping_cart</v-icon>
-              Add to card
-            </v-btn>
+          <v-card-actions class="d-flex align-center justify-center">
+            <v-row class="align-center justify-center">
+                <v-col cols="6" sm="4" md="4">
+                  <v-btn large color="secondary" @click="addToCart" :loading="loading">
+                    <v-icon>shopping_cart</v-icon>
+                    Add to card
+                  </v-btn>
+                </v-col>
+                <v-col cols="6" sm="4" md="4" lg="4" class="align-center justify-center">
+                  <v-text-field value="1" type="number" placeholder="Qty" v-model="qty"/>
+                </v-col>
+            </v-row>
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
+    <v-snackbar v-model="error" app bottom color="error">
+      {{ errorMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click.stop="error = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <v-snackbar v-model="success" app bottom color="secondary">
+      Added to Cart!
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click.stop="success = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
+import API from '../services/api'
 export default {
   name: 'ProductDetail',
   data () {
     return {
       product: {},
-      imageHeight: 0
+      imageHeight: 0,
+      loading: false,
+      error: false,
+      success: false,
+      errorMessage: '',
+      cart: 0,
+      qty: 1
     }
   },
   mounted () {
@@ -73,8 +103,28 @@ export default {
       const fullHeight = window.innerHeight
       const headerHeight = this.$refs.appbar.$el.clientHeight
       this.imageHeight = fullHeight - headerHeight - 16
-      console.log(this.imageHeight)
-      // this.windowSize = { x: window.innerWidth, y: window.innerHeight }
+    },
+    async addToCart () {
+      try {
+        this.loading = true
+        let userId
+        // Validate userId autogenerate in localStorage or generate new userId
+        if (!localStorage.getItem('userId')) {
+          const { data: { user: { _id: id } } } = await API.getUserId()
+          userId = id
+          localStorage.setItem('userId', userId)
+        } else {
+          userId = localStorage.getItem('userId')
+        }
+        await API.addProductToCart({ userId, productId: this.product._id, qty: this.qty })
+        this.cart += this.qty
+        this.success = true
+      } catch (error) {
+        this.error = true
+        this.errorMessage = error.message
+      } finally {
+        this.loading = false
+      }
     }
   }
 }

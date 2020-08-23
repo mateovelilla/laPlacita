@@ -14,6 +14,8 @@ const { MONGODB_USERNAME, MONGODB_PASSWORD, MONGODB_HOST, MONGODB_PORT, MONGODB_
 
 // IMPORT ROUTES
 const ProductRouter = require(path.resolve(__dirname, './routes/productRouter'))
+const UserRouter = require(path.resolve(__dirname, './routes/userRouter'))
+const CartRouter = require(path.resolve(__dirname, './routes/cartRouter'))
 
 // BUILD DATABASE URL
 const url = `mongodb://${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DBNAME}`;
@@ -31,6 +33,8 @@ mongoose.connect(url, {
 });
 
 // ROUTES INJECTION
-app.use(ProductRouter().routes());
+app.use(ProductRouter().routes())
+app.use(UserRouter().routes())
+app.use(CartRouter().routes())
 
 app.listen(3000);

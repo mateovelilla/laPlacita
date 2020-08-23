@@ -12,5 +12,25 @@ export default {
     } catch (error) {
       throw new Error(error.response.data.message)
     }
+  },
+  async getUserId () {
+    try {
+      const response = API.post('/users')
+      return response
+    } catch (error) {
+      throw new Error(error.response.data.message)
+    }
+  },
+  async addProductToCart ({ userId, productId, qty }) {
+    try {
+      const response = API.post('/carts', {
+        userId,
+        productId,
+        qty
+      })
+      return response
+    } catch (error) {
+      throw new Error(error.response.data.message)
+    }
   }
 }
