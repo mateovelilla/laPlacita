@@ -14,7 +14,11 @@
       </v-app-bar-nav-icon>
       <v-toolbar-title>Product Detail</v-toolbar-title>
       <v-spacer></v-spacer>
-      <!-- TODO: cart -->
+      <v-badge class="mr-4" color="primary" :content="shopping_cart.length.toString()">
+        <v-btn icon small @click="openCart">
+          <v-icon>shopping_cart</v-icon>
+        </v-btn>
+      </v-badge>
     </v-app-bar>
     <v-row no-gutters>
       <v-col cols="12" md="5" class="pa-4">
@@ -85,17 +89,27 @@ export default {
       success: false,
       errorMessage: '',
       cart: 0,
-      qty: 1
+      qty: 0,
+      shopping_cart: []
     }
   },
-  mounted () {
+  async mounted () {
     if (!this.$route.params.product) {
       this.$router.push({ name: 'Home' })
     }
+    if (localStorage.getItem('userId')) {
+      const userId = localStorage.getItem('userId')
+      const { data: { cart } } = await API.getCart({ userId })
+      this.shopping_cart = cart
+    }
     this.product = this.$route.params.product
+    await this.$nextTick()
     this.onResize()
   },
   methods: {
+    openCart () {
+      this.$router.push({ name: 'Cart' })
+    },
     back () {
       this.$router.push({ name: 'Home' })
     },
@@ -108,7 +122,7 @@ export default {
       try {
         this.loading = true
         let userId
-        // Validate userId autogenerate in localStorage or generate new userId
+        // Validate the userId field autogenerate in localStorage or generate new userId
         if (!localStorage.getItem('userId')) {
           const { data: { user: { _id: id } } } = await API.getUserId()
           userId = id
@@ -117,7 +131,18 @@ export default {
           userId = localStorage.getItem('userId')
         }
         await API.addProductToCart({ userId, productId: this.product._id, qty: this.qty })
-        this.cart += this.qty
+
+        // VALIDATE IF THIS PRODUCT EXIST IN THE CART
+        const flat = this.shopping_cart.some(p => p.productId === this.product._id)
+        if (!flat) {
+          this.shopping_cart.push({
+            productId: this.product._id,
+            image: this.product.image,
+            price: this.product.price,
+            qty: this.qty,
+            title: this.product.title
+          })
+        }
         this.success = true
       } catch (error) {
         this.error = true

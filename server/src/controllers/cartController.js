@@ -1,20 +1,34 @@
 const Joi = require('@hapi/joi')
 class CartController {
-  constructor (cartModel) {
+  constructor (cartModel, productModel) {
     this._cartModel = cartModel
+    this._productModel = productModel
   }
-  async findByUserId(userId) {
+  async findByUserId({ userId }) {
+    let newCart = []
     const schema = Joi.object({
       userId: Joi.string().required()
     })
-    await schema.validateAsync({userId})
-    const cart = await this._cartModel.find({userId})
-    return cart
+    await schema.validateAsync({ userId })
+    const cart = await this._cartModel.find({ userId })
+    for (const productInCart of cart) {
+      const { productId, qty } = productInCart
+      const { image, title, price }  = await this._productModel.findById(productId)
+      newCart.push({
+        productId,
+        qty,
+        image,
+        title,
+        price
+      })
+    }
+    return newCart
   }
   async find(params) {
     const cart = await this._cartModel.find(params)
     return cart
   }
+  
   async deleteProduct (params) {
     const schema = Joi.object({
       userId: Joi.string().required(),

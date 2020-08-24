@@ -22,22 +22,28 @@
               item-value="v"
             >
             </v-select>
-            <v-combobox
-              v-model="filter"
+            <v-text-field
+              v-model="search"
               class="rounded-l-0"
               light
               hide-details
               solo
               flat
               autofocus
-              :items="keywords"
+              search-input.sync="filter"
             >
               <template v-slot:append>
                 <v-icon>search</v-icon>
               </template>
-            </v-combobox>
+            </v-text-field>
           </div>
         </v-col>
+        <v-spacer></v-spacer>
+        <v-badge class="mr-4" color="primary" :content="shopping_cart.length.toString()">
+          <v-btn icon small @click="openCart">
+            <v-icon>shopping_cart</v-icon>
+          </v-btn>
+        </v-badge>
       </v-row>
     </v-app-bar>
     <v-row class="justify-stretch align-center">
@@ -66,12 +72,49 @@ export default {
   },
   data () {
     return {
+      search: '',
       products: [],
       filter: null,
+      shopping_cart: [],
+      filteredProducts: [],
       selectedCategory: {
         t: 'All',
         v: 'All'
       }
+    }
+  },
+  watch: {
+    selectedCategory: function (val) {
+      if (!this.search || this.search.length === 0) {
+        this.filteredProducts = this.products.filter(p => p.category === val || val === 'All')
+      } else {
+        this.filteredProducts = this.products.filter(p =>
+          (p.category === val || val === 'All') &&
+          (
+            p.title.toLowerCase().includes(this.search.toLowerCase()) ||
+            p.description.toLowerCase().includes(this.search.toLowerCase()) ||
+            p.title.toLowerCase().includes(this.search.toLowerCase()) ||
+            this.toLowerCase(p.keywords).includes(this.search.toLowerCase())
+          )
+        )
+      }
+    },
+    search: function (val) {
+      this.filteredProducts = this.products.filter(p =>
+        (
+          (p.category === this.selectedCategory.v || this.selectedCategory.v === 'All') ||
+          (p.category === this.selectedCategory || this.selectedCategory === 'All')
+        ) &&
+        (
+          p.title.toLowerCase().includes(this.search.toLowerCase()) ||
+          p.description.toLowerCase().includes(this.search.toLowerCase()) ||
+          p.title.toLowerCase().includes(this.search.toLowerCase()) ||
+          this.toLowerCase(p.keywords).includes(this.search.toLowerCase())
+        )
+      )
+    },
+    products: function (val) {
+      this.filteredProducts = val
     }
   },
   computed: {
@@ -83,46 +126,43 @@ export default {
           (c, i, array) => array.indexOf(c) === i
         )
       )
-    },
-    keywords () {
-      return this.products
-        .reduce((accum, p) => {
-          if (!this.selectedCategory || this.selectedCategory === 'All') {
-            return accum.concat(p)
-          }
-          if (this.selectedCategory === p.category) {
-            return accum.concat(p)
-          } else {
-            return accum
-          }
-        }, [])
-        .map(p => p.keywords)
-        .reduce((accum, keywords) => accum.concat(keywords), [])
-    },
-    filteredProducts () {
-      return this.products.filter(p => {
-        const keywordsLowerCase = p.keywords.map(k => k.toLowerCase())
-        const title = p.title.toLowerCase()
-        const description = p.description.toLowerCase()
-        return (
-          (this.selectedCategory.t && this.selectedCategory.t === 'All') ||
-          (this.selectedCategory && this.selectedCategory === 'All') ||
-          (!this.filter && p.category === this.selectedCategory) ||
-          (p.category === this.selectedCategory && title.includes(this.filter.toLowerCase())) ||
-          (p.category === this.selectedCategory && keywordsLowerCase.includes(this.filter.toLowerCase())) ||
-          (p.category === this.selectedCategory && description.includes(this.filter.toLowerCase()))
-        )
-      })
     }
+    // filteredProducts () {
+    //   return this.products.filter(p => {
+    //     const keywordsLowerCase = p.keywords.map(k => k.toLowerCase())
+    //     const title = p.title.toLowerCase()
+    //     const description = p.description.toLowerCase()
+    //     console.log(((!this.filter || this.filter.length === 0) && this.selectedCategory.t && this.selectedCategory.t === 'All'))
+    //     return (
+    //       ((!this.filter || this.filter.length === 0) && this.selectedCategory.t && this.selectedCategory.t === 'All') ||
+    //       ((!this.filter || this.filter.length === 0) && this.selectedCategory && this.selectedCategory === 'All') ||
+    //       (!this.filter && p.category === this.selectedCategory) ||
+    //       (p.category === this.selectedCategory && title.includes(this.filter.toLowerCase())) ||
+    //       (p.category === this.selectedCategory && keywordsLowerCase.includes(this.filter.toLowerCase())) ||
+    //       (p.category === this.selectedCategory && description.includes(this.filter.toLowerCase()))
+    //     )
+    //   })
+    // }
   },
   methods: {
     openDetail (product) {
       this.$router.push({ name: 'product detail', params: { product: product } })
+    },
+    openCart () {
+      this.$router.push({ name: 'Cart' })
+    },
+    toLowerCase (object) {
+      return object.map(element => element.toLowerCase())
     }
   },
   async mounted () {
     const { data: { products } } = await API.getProducts()
     this.products = products
+    if (localStorage.getItem('userId')) {
+      const userId = localStorage.getItem('userId')
+      const { data: { cart } } = await API.getCart({ userId })
+      this.shopping_cart = cart
+    }
   }
 }
 </script>

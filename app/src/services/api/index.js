@@ -32,5 +32,13 @@ export default {
     } catch (error) {
       throw new Error(error.response.data.message)
     }
+  },
+  async getCart ({ userId }) {
+    try {
+      const response = API.get(`/carts/${userId}`)
+      return response
+    } catch (error) {
+      throw new Error(error.response.data.message)
+    }
   }
 }
