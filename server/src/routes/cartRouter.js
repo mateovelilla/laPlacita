@@ -20,7 +20,21 @@ module.exports = function () {
       }
     }
   })
-
+  router.put('/carts', async (ctx, next) => {
+    try {
+      const cart = await cartController.update(ctx.request.body)
+      ctx.status = 200;
+      ctx.body = {
+          cart
+      }
+       
+    } catch (error) {
+      ctx.status = 400;
+      ctx.body = {
+        message: error.message
+      }
+    }
+  })
   router.get('/carts/:userId', async (ctx, next) => {
     try {
       const cart = await cartController.findByUserId({
@@ -29,6 +43,20 @@ module.exports = function () {
       ctx.status = 200
       ctx.body = {
           cart
+      }
+    } catch (error) {
+      ctx.status = 400;
+      ctx.body = {
+        message: error.message
+      }
+    }
+  })
+  router.delete('/carts/:userId/:productId', async (ctx, next) => {
+    try {
+      const cart = await cartController.deleteProduct(ctx.request.params)
+      ctx.status = 200
+      ctx.body = {
+        cart
       }
     } catch (error) {
       ctx.status = 400;

@@ -89,7 +89,7 @@ export default {
       success: false,
       errorMessage: '',
       cart: 0,
-      qty: 0,
+      qty: 1,
       shopping_cart: []
     }
   },
@@ -108,7 +108,7 @@ export default {
   },
   methods: {
     openCart () {
-      this.$router.push({ name: 'Cart' })
+      this.$router.push({ name: 'shopping cart' })
     },
     back () {
       this.$router.push({ name: 'Home' })
@@ -134,7 +134,7 @@ export default {
         }
         await API.addProductToCart({ userId, productId: this.product._id, qty: this.qty })
         this.shopping_cart += Number(this.qty)
-        this.qty = 0
+        this.qty = 1
         this.success = true
       } catch (error) {
         this.error = true

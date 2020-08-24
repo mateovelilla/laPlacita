@@ -30,14 +30,32 @@ export default {
       })
       return response
     } catch (error) {
-      console.log('Entro aca')
-      console.log(error)
       throw new Error(error.response.data.message)
     }
   },
   async getCart ({ userId }) {
     try {
       const response = await API.get(`/carts/${userId}`)
+      return response
+    } catch (error) {
+      throw new Error(error.response.data.message)
+    }
+  },
+  async removeProduct ({ userId, productId }) {
+    try {
+      const response = await API.delete(`/carts/${userId}/${productId}`)
+      return response
+    } catch (error) {
+      throw new Error(error.response.data.message)
+    }
+  },
+  async updateCart ({ userId, productId, qty }) {
+    try {
+      const response = await API.put('/carts', {
+        userId,
+        productId,
+        qty
+      })
       return response
     } catch (error) {
       throw new Error(error.response.data.message)

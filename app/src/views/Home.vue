@@ -133,7 +133,7 @@ export default {
       this.$router.push({ name: 'product detail', params: { product: product } })
     },
     openCart () {
-      this.$router.push({ name: 'Cart' })
+      this.$router.push({ name: 'shopping cart' })
     },
     toLowerCase (object) {
       return object.map(element => element.toLowerCase())

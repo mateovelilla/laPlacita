@@ -35,7 +35,7 @@ class CartController {
       productId: Joi.string().required()
     })
     const { userId, productId } = await schema.validateAsync(params)
-    return await this._cartModel.deleteProduct({ userId, productId })
+    return await this._cartModel.deleteOne({ userId, productId })
   }
   async create (params) {
     const schema = Joi.object({
@@ -55,6 +55,15 @@ class CartController {
       const newQty = cart.qty + qty
       cartCreated = await this._cartModel.updateOne({userId, productId}, { qty: newQty })
     }
+  }
+  async update (params) {
+    const schema = Joi.object({
+      userId: Joi.string().required(),
+      productId: Joi.string().required(),
+      qty: Joi.number().required()
+    })
+    const { userId, productId, qty } = await schema.validateAsync(params)
+    return await this._cartModel.updateOne({userId, productId}, { qty: qty })
   }
 }
 module.exports = CartController

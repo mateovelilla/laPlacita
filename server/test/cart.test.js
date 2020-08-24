@@ -9,7 +9,7 @@ test.before(async t=> {
 				throw Error('No such cart')
 			return []
 		}
-		async deleteProduct(params) {
+		async deleteOne(params) {
 			return true
     }
     async find ({userId}) {
