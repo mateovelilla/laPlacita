@@ -14,7 +14,7 @@
       </v-app-bar-nav-icon>
       <v-toolbar-title>Product Detail</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-badge class="mr-4" color="primary" :content="shopping_cart.length.toString()">
+      <v-badge class="mr-4" color="primary" :content="shopping_cart.toString()">
         <v-btn icon small @click="openCart">
           <v-icon>shopping_cart</v-icon>
         </v-btn>
@@ -100,7 +100,7 @@ export default {
     if (localStorage.getItem('userId')) {
       const userId = localStorage.getItem('userId')
       const { data: { cart } } = await API.getCart({ userId })
-      this.shopping_cart = cart
+      this.shopping_cart = cart.reduce((accu, p) => accu + p.qty, 0)
     }
     this.product = this.$route.params.product
     await this.$nextTick()
@@ -115,8 +115,10 @@ export default {
     },
     onResize () {
       const fullHeight = window.innerHeight
-      const headerHeight = this.$refs.appbar.$el.clientHeight
-      this.imageHeight = fullHeight - headerHeight - 16
+      if (this.$refs.appbar) {
+        const headerHeight = this.$refs.appbar.$el.clientHeight
+        this.imageHeight = fullHeight - headerHeight - 16
+      }
     },
     async addToCart () {
       try {
@@ -131,18 +133,8 @@ export default {
           userId = localStorage.getItem('userId')
         }
         await API.addProductToCart({ userId, productId: this.product._id, qty: this.qty })
-
-        // VALIDATE IF THIS PRODUCT EXIST IN THE CART
-        const flat = this.shopping_cart.some(p => p.productId === this.product._id)
-        if (!flat) {
-          this.shopping_cart.push({
-            productId: this.product._id,
-            image: this.product.image,
-            price: this.product.price,
-            qty: this.qty,
-            title: this.product.title
-          })
-        }
+        this.shopping_cart += Number(this.qty)
+        this.qty = 0
         this.success = true
       } catch (error) {
         this.error = true

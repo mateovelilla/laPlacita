@@ -43,15 +43,17 @@ class CartController {
       productId: Joi.string().required(),
       qty: Joi.number().required()
     })
+    
     let cartCreated
     const { userId, productId, qty } = await schema.validateAsync(params)
     const cart = await this._cartModel.findOne({userId, productId})
+    
     // IF EXISTS THIS PRODUCT INTO CART
     if (!cart || Object.keys(cart).length === 0) {
       cartCreated = await this._cartModel.create({ userId, productId, qty })
     } else {
       const newQty = cart.qty + qty
-      cartCreated = await this._cartModel.update({userId, productId}, { qty: newQty })
+      cartCreated = await this._cartModel.updateOne({userId, productId}, { qty: newQty })
     }
   }
 }

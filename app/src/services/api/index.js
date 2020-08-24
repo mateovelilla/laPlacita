@@ -7,7 +7,7 @@ const API = axios.create({
 export default {
   async getProducts () {
     try {
-      const response = API.get('/products')
+      const response = await API.get('/products')
       return response
     } catch (error) {
       throw new Error(error.response.data.message)
@@ -15,7 +15,7 @@ export default {
   },
   async getUserId () {
     try {
-      const response = API.post('/users')
+      const response = await API.post('/users')
       return response
     } catch (error) {
       throw new Error(error.response.data.message)
@@ -23,19 +23,21 @@ export default {
   },
   async addProductToCart ({ userId, productId, qty }) {
     try {
-      const response = API.post('/carts', {
+      const response = await API.post('/carts', {
         userId,
         productId,
         qty
       })
       return response
     } catch (error) {
+      console.log('Entro aca')
+      console.log(error)
       throw new Error(error.response.data.message)
     }
   },
   async getCart ({ userId }) {
     try {
-      const response = API.get(`/carts/${userId}`)
+      const response = await API.get(`/carts/${userId}`)
       return response
     } catch (error) {
       throw new Error(error.response.data.message)

@@ -39,7 +39,8 @@
           </div>
         </v-col>
         <v-spacer></v-spacer>
-        <v-badge class="mr-4" color="primary" :content="shopping_cart.length.toString()">
+
+        <v-badge class="mr-4" color="primary" :content="shopping_cart.toString()">
           <v-btn icon small @click="openCart">
             <v-icon>shopping_cart</v-icon>
           </v-btn>
@@ -62,7 +63,6 @@
 </template>
 
 <script>
-// TODO: https://github.com/Intera/vue-zoom-on-hover
 import API from '../services/api'
 import Product from '../components/Product'
 export default {
@@ -140,12 +140,13 @@ export default {
     }
   },
   async mounted () {
+    // TODO: https://github.com/Intera/vue-zoom-on-hover
     const { data: { products } } = await API.getProducts()
     this.products = products
     if (localStorage.getItem('userId')) {
       const userId = localStorage.getItem('userId')
       const { data: { cart } } = await API.getCart({ userId })
-      this.shopping_cart = cart
+      this.shopping_cart = cart.reduce((accu, p) => accu + p.qty, 0)
     }
   }
 }
