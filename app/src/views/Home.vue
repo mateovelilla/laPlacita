@@ -127,22 +127,6 @@ export default {
         )
       )
     }
-    // filteredProducts () {
-    //   return this.products.filter(p => {
-    //     const keywordsLowerCase = p.keywords.map(k => k.toLowerCase())
-    //     const title = p.title.toLowerCase()
-    //     const description = p.description.toLowerCase()
-    //     console.log(((!this.filter || this.filter.length === 0) && this.selectedCategory.t && this.selectedCategory.t === 'All'))
-    //     return (
-    //       ((!this.filter || this.filter.length === 0) && this.selectedCategory.t && this.selectedCategory.t === 'All') ||
-    //       ((!this.filter || this.filter.length === 0) && this.selectedCategory && this.selectedCategory === 'All') ||
-    //       (!this.filter && p.category === this.selectedCategory) ||
-    //       (p.category === this.selectedCategory && title.includes(this.filter.toLowerCase())) ||
-    //       (p.category === this.selectedCategory && keywordsLowerCase.includes(this.filter.toLowerCase())) ||
-    //       (p.category === this.selectedCategory && description.includes(this.filter.toLowerCase()))
-    //     )
-    //   })
-    // }
   },
   methods: {
     openDetail (product) {
