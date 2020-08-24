@@ -90,7 +90,7 @@ export default {
       errorMessage: '',
       cart: 0,
       qty: 1,
-      shopping_cart: []
+      shopping_cart: 0
     }
   },
   async mounted () {

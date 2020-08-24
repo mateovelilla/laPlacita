@@ -75,7 +75,7 @@ export default {
       search: '',
       products: [],
       filter: null,
-      shopping_cart: [],
+      shopping_cart: 0,
       filteredProducts: [],
       selectedCategory: {
         t: 'All',
