@@ -1,6 +1,5 @@
 The first commit
 ## REQUIREMENTS
-* nodeJs : 14.8.0
-* docker-compose
+* docker-compose 1.26.2
 ## HOW TO INSTALL?
     - Rename file './server/env-sample' to './server/.env'
