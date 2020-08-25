@@ -1,5 +1,15 @@
 version: '3'
 services:
+    backend:
+        image: node:14.8.0-alpine3.10
+        build: ./server
+        container_name: 'backend'
+        depends_on:
+            - database
+        ports:
+            - '3000:3000'
+        networks:
+            - marcketplace_network
     database:
         image: mongo
         container_name: 'mongodb'
@@ -10,5 +20,8 @@ services:
         volumes:
             - ./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
             - ./mongo-volume:/data/db
-        ports:
-            - '27017:27017'
+        networks:
+        - marcketplace_network
+networks:
+    marcketplace_network:
+        driver: bridge

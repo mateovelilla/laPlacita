@@ -37,4 +37,4 @@ app.use(ProductRouter().routes())
 app.use(UserRouter().routes())
 app.use(CartRouter().routes())
 
-app.listen(3000);
+app.listen(process.env.PORT);
