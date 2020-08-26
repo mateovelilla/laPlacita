@@ -1,7 +1,6 @@
 version: '3'
 services:
     app:
-        image: node:14.8.0-alpine3.10
         build: ./app
         container_name: 'app'
         depends_on:
