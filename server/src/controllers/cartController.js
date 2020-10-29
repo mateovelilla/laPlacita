@@ -4,7 +4,7 @@ class CartController {
     this._cartModel = cartModel
     this._productModel = productModel
   }
-  async findByUserId(userId ) {
+  async findByUserId(userId) {
     let newCart = []
     const schema = Joi.object({
       userId: Joi.string().required()
