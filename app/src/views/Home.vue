@@ -47,10 +47,9 @@
         </v-badge>
       </v-row>
     </v-app-bar>
-    <v-row class="justify-stretch align-center">
+    <v-row class="justify-stretch align-center pa-4 ma-0">
       <v-col
         v-for="product in filteredProducts" :key="product.id"
-        class="pa-3"
         cols="12"
         sm="12"
         md="4"
