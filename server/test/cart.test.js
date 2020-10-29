@@ -28,7 +28,7 @@ test.before(async t=> {
 test('Get cart by userId fails - userId field', async t => {
 	await t.throwsAsync(
 		async () => {
-			const cart = await cartController.findByUserId('')
+			await cartController.findByUserId('')
     }, {
       instanceOf: Error,
       message: '"userId" is not allowed to be empty'
@@ -44,7 +44,7 @@ test('Get cart by userId fails - userId field', async t => {
 	)
 	await t.throwsAsync(
 		async () => {
-			const cart = await cartController.findByUserId('nonEx1st3nt1D')
+			await cartController.findByUserId('nonEx1st3nt1D')
     }, {
       instanceOf: Error,
       message: 'No such cart'
