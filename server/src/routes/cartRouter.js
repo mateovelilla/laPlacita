@@ -37,9 +37,9 @@ module.exports = function () {
   })
   router.get('/carts/:userId', async (ctx, next) => {
     try {
-      const cart = await cartController.findByUserId({
-        userId: ctx.request.params.userId
-      })
+      const cart = await cartController.findByUserId(
+        ctx.request.params.userId
+      )
       ctx.status = 200
       ctx.body = {
           cart
